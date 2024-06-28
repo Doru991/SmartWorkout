@@ -17,12 +17,17 @@ namespace SmartWorkout.DBAccess
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Workout> Workouts { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<ExerciseLog> Logs { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             new UserConfiguration().Configure(modelBuilder.Entity<User>());
             new WorkoutConfiguration().Configure(modelBuilder.Entity<Workout>());
+            new ExerciseConfiguration().Configure(modelBuilder.Entity<Exercise>());
+            new ExerciseLogConfig().Configure(modelBuilder.Entity<ExerciseLog>());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

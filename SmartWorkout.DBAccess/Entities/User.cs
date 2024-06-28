@@ -15,7 +15,7 @@ namespace SmartWorkout.DBAccess.Entities
         public string? Phone { get; set; }
         public double? Weight { get; set; }
         public int? Age { get; set; }
-        
+
         public ICollection<Workout> Workouts { get; set; } = new HashSet<Workout>();
     }
 }

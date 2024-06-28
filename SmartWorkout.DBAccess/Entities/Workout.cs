@@ -13,5 +13,6 @@ namespace SmartWorkout.DBAccess.Entities
         public int? Duration { get; set; }
         public DateTime Date { get; set; }
         public User User { get; set; } = null!;
+        public ICollection<ExerciseLog> Logs { get; set; } = new HashSet<ExerciseLog>();
     }
 }
