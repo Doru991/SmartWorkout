@@ -1,0 +1,45 @@
+﻿@page "/users"
+@using DBAccess
+@using DBAccess.Repository
+@attribute [StreamRendering]
+
+<PageTitle>Users</PageTitle>
+
+Client list:
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Weight</th>
+                <th>Age</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Surname</td>
+                    <td>@(user.Weight.ToString() ?? "Weight unknown")</td>
+                    <td>@(user.Age.ToString() ?? "Age unknown")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private User[]? users = null;
+    protected override async Task OnInitializedAsync()
+    {
+        IUserRepository userRepository = new UserRepository(new SmartWorkoutContext());
+        users = await userRepository.GetUsers();
+    }
+}
