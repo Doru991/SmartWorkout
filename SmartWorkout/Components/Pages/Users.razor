@@ -39,7 +39,7 @@ else
     private User[]? users = null;
     protected override async Task OnInitializedAsync()
     {
-        IUserRepository userRepository = new UserRepository(new SmartWorkoutContext());
-        users = await userRepository.GetUsers();
+        IGenericRepository<User> userRepository = new GenericRepository<User>(new SmartWorkoutContext());
+        users = await userRepository.GetItems();
     }
 }

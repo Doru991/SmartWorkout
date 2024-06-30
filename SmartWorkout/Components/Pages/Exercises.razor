@@ -1,0 +1,39 @@
+﻿@page "/exercises"
+@using DBAccess
+@using DBAccess.Repository
+@attribute [StreamRendering]
+
+<PageTitle>Exercises</PageTitle>
+
+Exercise types:
+
+@if (exercises == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var exercise in exercises)
+            {
+                <tr>
+                    <td>@exercise.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private Exercise[]? exercises = null;
+    protected override async Task OnInitializedAsync()
+    {
+        IGenericRepository<Exercise> exerciseRepository = new GenericRepository<Exercise>(new SmartWorkoutContext());
+        exercises = await exerciseRepository.GetItems();
+    }
+}
