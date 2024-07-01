@@ -1,0 +1,79 @@
+﻿@page "/modifyuser/{UserId}"
+@inject IGenericRepository<User> Repo
+@inject NavigationManager NavigationManager
+@using DBAccess
+@using DBAccess.Repository
+@rendermode InteractiveServer
+@attribute [StreamRendering]
+<PageTitle>Add User</PageTitle>
+
+<h3>Modifying User</h3>
+@if (User == null)
+{
+    <p><em>Loading...</em></p>
+}
+else{
+<EditForm Model="User" OnSubmit="Submit" FormName="NewClient">
+    <div>
+        <label>
+            Name:
+            <InputText @bind-Value="User!.Name" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Surname:
+            <InputText @bind-Value="User!.Surname" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Email:
+            <InputText @bind-Value="User!.Email" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Phone number:
+            <InputText @bind-Value="User!.Phone" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Weight:
+            <InputNumber @bind-Value="User!.Weight" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Age:
+            <InputNumber @bind-Value="User!.Age" />
+        </label>
+    </div>
+    <div><button type="submit">Save Changes</button></div>
+</EditForm>
+}
+@code {
+    [Parameter]
+    public String? UserId { get; set; }
+    [SupplyParameterFromForm]
+    public User? User { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserId != null)
+        {
+            int Id = Int32.Parse(UserId);
+            User = await Repo.GetItemById(Id);
+        }
+        else User = null;
+    }
+    private void Submit()
+    {
+        if (User != null)
+        {
+            Repo.UpdateItem(User);
+            Repo.Save();
+            NavigationManager.NavigateTo("users");
+        }
+    }
+}

@@ -9,7 +9,8 @@ namespace SmartWorkout.DBAccess.Repository
 {
     public interface IGenericRepository<T> : IDisposable where T : class
     {
-        public Task<T[]> GetItems();
+        public Task<T[]> GetItemsAsync();
+        public T[] GetItems();
         public Task<T?> GetItemById(int id);
         public void AddItem(T item);
         public void DeleteItem(int id);

@@ -2,6 +2,8 @@
 @inject IGenericRepository<User> Repo
 @using DBAccess
 @using DBAccess.Repository
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 @attribute [StreamRendering]
 
 <PageTitle>Users</PageTitle>
@@ -17,6 +19,7 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>Options</th>
                 <th>Name</th>
                 <th>Surname</th>
                 <th>Weight</th>
@@ -27,6 +30,7 @@ else
             @foreach (var user in users)
             {
                 <tr>
+                    <td><button @onclick="(() => DeleteUser(user))">Delete</button><button @onclick="(() => ModifyUser(user))">Edit</button></td>
                     <td>@user.Name</td>
                     <td>@user.Surname</td>
                     <td>@(user.Weight.ToString() ?? "Weight unknown")</td>
@@ -40,6 +44,16 @@ else
     private User[]? users = null;
     protected override async Task OnInitializedAsync()
     {
-        users = await Repo.GetItems();
+        users = await Repo.GetItemsAsync();
+    }
+    void DeleteUser(User user)
+    {
+        Repo.DeleteItem(user.Id);
+        Repo.Save();
+        users = Repo.GetItems();
+    }
+    void ModifyUser(User user)
+    {
+        NavigationManager.NavigateTo("modifyuser/"+user.Id);
     }
 }

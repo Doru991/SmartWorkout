@@ -38,14 +38,17 @@ namespace SmartWorkout.DBAccess.Repository
         GC.SuppressFinalize(this);
     }
 
-        public Task<T[]> GetItems()
+        public Task<T[]> GetItemsAsync()
         {
             return context.Set<T>().ToArrayAsync<T>();
         }
-
-        public Task<T?> GetItemById(int id)
+        public T[] GetItems()
         {
-            throw new NotImplementedException();
+            return context.Set<T>().ToArray<T>();
+        }
+        public async Task<T?> GetItemById(int id)
+        {
+            return await context.Set<T>().FindAsync(id);
         }
 
         public void AddItem(T item)
@@ -55,12 +58,16 @@ namespace SmartWorkout.DBAccess.Repository
 
         public void DeleteItem(int id)
         {
-            throw new NotImplementedException();
+            T? item = context.Set<T>().Find(id);
+            if (item != null)
+            {
+                context.Set<T>().Remove(item);
+            }
         }
 
         public void UpdateItem(T item)
         {
-            throw new NotImplementedException();
+            context.Entry(item).State = EntityState.Modified;
         }
     }
 }
