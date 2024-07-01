@@ -19,6 +19,30 @@
         <InputText @bind-Value="User!.Surname" />
     </label>
     </div>
+    <div>
+        <label>
+            Email:
+            <InputText @bind-Value="User!.Email" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Phone number:
+            <InputText @bind-Value="User!.Phone" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Weight:
+            <InputNumber @bind-Value="User!.Weight" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Age:
+            <InputNumber @bind-Value="User!.Age" />
+        </label>
+    </div>
     <div><button type="submit">Create User</button></div>
 </EditForm>
 
