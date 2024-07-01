@@ -48,9 +48,9 @@ namespace SmartWorkout.DBAccess.Repository
             throw new NotImplementedException();
         }
 
-        public void AddItem(T user)
+        public void AddItem(T item)
         {
-            throw new NotImplementedException();
+            context.Set<T>().Add(item);
         }
 
         public void DeleteItem(int id)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartWorkout.DBAccess.Repository
 {
+    [Obsolete("Replaced by generic repo")]
     public interface IUserRepository : IDisposable
     {
         public Task<User[]> GetUsers();

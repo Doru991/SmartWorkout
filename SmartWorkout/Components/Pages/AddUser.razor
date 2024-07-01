@@ -1,0 +1,38 @@
+﻿@page "/adduser"
+@inject IGenericRepository<User> Repo
+@inject NavigationManager NavigationManager
+@using DBAccess
+@using DBAccess.Repository
+@rendermode InteractiveServer
+<PageTitle>Add User</PageTitle>
+
+<h3>Add User</h3>
+
+<EditForm Model="User" OnSubmit="Submit" FormName="NewClient">
+    <div><label>
+        Name:
+        <InputText @bind-Value="User!.Name" />
+    </label>
+    </div>
+    <div><label>
+        Surname:
+        <InputText @bind-Value="User!.Surname" />
+    </label>
+    </div>
+    <div><button type="submit">Create User</button></div>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public User? User { get; set; }
+    protected override void OnInitialized() => User ??= new();
+    private void Submit()
+    {
+        if (User != null)
+        {
+            Repo.AddItem(User);
+            Repo.Save();
+            NavigationManager.NavigateTo("users");
+        }
+    }
+}

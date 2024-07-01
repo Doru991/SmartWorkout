@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace SmartWorkout.DBAccess.Repository
 {
+    [Obsolete("Replaced by generic repo")]
     public class ExerciseRepository : IExerciseRepository, IDisposable
     {
         private SmartWorkoutContext context;

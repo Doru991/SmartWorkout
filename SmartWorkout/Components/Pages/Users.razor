@@ -1,12 +1,13 @@
 ﻿@page "/users"
+@inject IGenericRepository<User> Repo
 @using DBAccess
 @using DBAccess.Repository
 @attribute [StreamRendering]
 
 <PageTitle>Users</PageTitle>
 
-Client list:
-
+Client list:<br />
+<a href="/adduser">Add User</a><br />
 @if (users == null)
 {
     <p><em>Loading...</em></p>
@@ -39,7 +40,6 @@ else
     private User[]? users = null;
     protected override async Task OnInitializedAsync()
     {
-        IGenericRepository<User> userRepository = new GenericRepository<User>(new SmartWorkoutContext());
-        users = await userRepository.GetItems();
+        users = await Repo.GetItems();
     }
 }

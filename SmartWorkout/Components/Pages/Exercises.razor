@@ -1,6 +1,7 @@
 ﻿@page "/exercises"
 @using DBAccess
 @using DBAccess.Repository
+@inject IGenericRepository<Exercise> Repo;
 @attribute [StreamRendering]
 
 <PageTitle>Exercises</PageTitle>
@@ -33,7 +34,6 @@ else
     private Exercise[]? exercises = null;
     protected override async Task OnInitializedAsync()
     {
-        IGenericRepository<Exercise> exerciseRepository = new GenericRepository<Exercise>(new SmartWorkoutContext());
-        exercises = await exerciseRepository.GetItems();
+        exercises = await Repo.GetItems();
     }
 }

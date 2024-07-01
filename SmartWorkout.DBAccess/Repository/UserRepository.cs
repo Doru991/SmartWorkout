@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartWorkout.DBAccess.Entities;
 namespace SmartWorkout.DBAccess.Repository
 {
+    [Obsolete("Replaced by generic repo")]
     public class UserRepository : IUserRepository, IDisposable
     {
         private SmartWorkoutContext context;
