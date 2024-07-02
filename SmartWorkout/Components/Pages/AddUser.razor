@@ -8,7 +8,9 @@
 
 <h3>Add User</h3>
 
-<EditForm Model="User" OnSubmit="Submit" FormName="NewClient">
+<EditForm Model="User" OnValidSubmit="Submit" FormName="NewClient">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div><label>
         Name:
         <InputText @bind-Value="User!.Name" />

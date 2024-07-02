@@ -4,7 +4,6 @@
 @using DBAccess
 @using DBAccess.Repository
 @rendermode InteractiveServer
-@attribute [StreamRendering]
 <PageTitle>Add User</PageTitle>
 
 <h3>Modifying User</h3>
@@ -13,7 +12,9 @@
     <p><em>Loading...</em></p>
 }
 else{
-<EditForm Model="User" OnSubmit="Submit" FormName="NewClient">
+<EditForm Model="User" OnValidSubmit="Submit" FormName="NewClient">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
     <div>
         <label>
             Name:
@@ -60,7 +61,7 @@ else{
     public User? User { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        if (UserId != null)
+        if (UserId != null && !UserId.Equals(""))
         {
             int Id = Int32.Parse(UserId);
             User = await Repo.GetItemById(Id);
