@@ -1,0 +1,50 @@
+﻿@page "/modifyexer/{ExerciseId}"
+@inject IGenericRepository<Exercise> Repo
+@inject NavigationManager NavigationManager
+@using DBAccess
+@using DBAccess.Repository
+@rendermode InteractiveServer
+<PageTitle>Edit Exercise</PageTitle>
+<h3>Modifying Exercise</h3>
+@if (Exercise == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="Exercise" OnValidSubmit="Submit" FormName="EditExercise">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div>
+            <label>
+                Exercise Name:
+                <InputText @bind-Value="Exercise!.Name" />
+            </label>
+        </div>
+        <div><button type="submit">Confirm</button></div>
+    </EditForm>
+}
+@code {
+    [Parameter]
+    public String? ExerciseId { get; set; }
+    [SupplyParameterFromForm]
+    public Exercise? Exercise { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        if (ExerciseId != null && !ExerciseId.Equals(""))
+        {
+            int Id = Int32.Parse(ExerciseId);
+            Exercise = await Repo.GetItemById(Id);
+        }
+        else Exercise = null;
+    }
+    private void Submit()
+    {
+        if (Exercise != null)
+        {
+            Repo.UpdateItem(Exercise);
+            Repo.Save();
+            NavigationManager.NavigateTo("exercises");
+        }
+    }
+}

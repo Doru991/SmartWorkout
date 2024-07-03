@@ -4,7 +4,7 @@
 @using DBAccess
 @using DBAccess.Repository
 @rendermode InteractiveServer
-<PageTitle>Add User</PageTitle>
+<PageTitle>Edit User</PageTitle>
 
 <h3>Modifying User</h3>
 @if (User == null)
@@ -12,7 +12,7 @@
     <p><em>Loading...</em></p>
 }
 else{
-<EditForm Model="User" OnValidSubmit="Submit" FormName="NewClient">
+<EditForm Model="User" OnValidSubmit="Submit" FormName="EditClient">
         <DataAnnotationsValidator />
         <ValidationSummary />
     <div>

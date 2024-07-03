@@ -2,10 +2,12 @@
 @using DBAccess
 @using DBAccess.Repository
 @inject IGenericRepository<Exercise> Repo;
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 @attribute [StreamRendering]
 
 <PageTitle>Exercises</PageTitle>
-
+<a href="/addexercise">New Exercise...</a><br />
 Exercise types:
 
 @if (exercises == null)
@@ -17,6 +19,7 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>Options</th>
                 <th>Name</th>
             </tr>
         </thead>
@@ -24,6 +27,7 @@ else
             @foreach (var exercise in exercises)
             {
                 <tr>
+                    <td><button @onclick="(() => DeleteExercise(exercise))">Delete</button><button @onclick="(() => ModifyExercise(exercise))">Edit</button></td>
                     <td>@exercise.Name</td>
                 </tr>
             }
@@ -35,5 +39,15 @@ else
     protected override async Task OnInitializedAsync()
     {
         exercises = await Repo.GetItemsAsync();
+    }
+    void DeleteExercise(Exercise exercise)
+    {
+        Repo.DeleteItem(exercise.Id);
+        Repo.Save();
+        exercises = Repo.GetItems();
+    }
+    void ModifyExercise(Exercise exercise)
+    {
+        NavigationManager.NavigateTo("modifyexer/" + exercise.Id);
     }
 }

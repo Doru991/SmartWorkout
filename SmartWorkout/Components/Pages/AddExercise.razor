@@ -1,0 +1,33 @@
+﻿@page "/addexercise"
+@inject IGenericRepository<Exercise> Repo
+@inject NavigationManager NavigationManager
+@using DBAccess
+@using DBAccess.Repository
+@rendermode InteractiveServer
+<PageTitle>Add Exercise</PageTitle>
+<h3>New Exercise</h3>
+<EditForm Model="Exercise" OnValidSubmit="Submit" FormName="NewExercise">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label>Exercise Name:
+            <InputText @bind-Value="Exercise!.Name" />
+        </label>
+    </div>
+    <div><button type="submit">Create Exercise</button></div>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public Exercise? Exercise { get; set; }
+    protected override void OnInitialized() => Exercise ??= new();
+    private void Submit()
+    {
+        if (Exercise != null)
+        {
+            Repo.AddItem(Exercise);
+            Repo.Save();
+            NavigationManager.NavigateTo("exercises");
+        }
+    }
+}
