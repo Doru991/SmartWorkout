@@ -16,6 +16,15 @@ Client list:<br />
 }
 else
 {
+    <form method="get" @onsubmit="Search" @formname="search">
+        <div>
+            <label>
+                Search by name:
+                <InputText @bind-Value="Searchtext" />
+                <button type="submit">Search</button>
+            </label>
+        </div>
+    </form>
     <table class="table">
         <thead>
             <tr>
@@ -41,10 +50,13 @@ else
     </table>
 }
 @code {
+    public String? Searchtext { get; set; }
     private User[]? users = null;
+    private User[]? orig = null;
     protected override async Task OnInitializedAsync()
     {
-        users = await Repo.GetItemsAsync();
+        orig = await Repo.GetItemsAsync();
+        users = orig;
     }
     void DeleteUser(User user)
     {
@@ -55,5 +67,13 @@ else
     void ModifyUser(User user)
     {
         NavigationManager.NavigateTo("modifyuser/"+user.Id);
+    }
+    private void Search()
+    {
+        if (orig != null && Searchtext != null)
+        {
+            User[] result = orig.Where(u => (u.Name + " " + u.Surname).Contains(Searchtext)).ToArray();
+            users = result;
+        }
     }
 }
