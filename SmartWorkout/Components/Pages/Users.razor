@@ -3,13 +3,14 @@
 @using DBAccess
 @using DBAccess.Repository
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 @rendermode InteractiveServer
 @attribute [StreamRendering]
 
 <PageTitle>Users</PageTitle>
 
-Client list:<br />
-<a href="/adduser">Add User</a><br />
+<h4>Client list:</h4><br />
+<a href="/adduser" class="linkbtn">Add User</a><br /><br />
 @if (users == null)
 {
     <p><em>Loading...</em></p>
@@ -21,10 +22,11 @@ else
             <label>
                 Search by name:
                 <InputText @bind-Value="Searchtext" />
-                <button type="submit">Search</button>
+                <button class="actionbtn" type="submit">&#x1F50E;</button>
             </label>
         </div>
     </form>
+    <br />
     <table class="table">
         <thead>
             <tr>
@@ -39,7 +41,7 @@ else
             @foreach (var user in users)
             {
                 <tr>
-                    <td><button @onclick="(() => DeleteUser(user))">Delete</button><button @onclick="(() => ModifyUser(user))">Edit</button></td>
+                    <td><button class="actionbtn" title="Delete" @onclick="(() => DeleteUser(user))">&#10060;</button><button class="actionbtn" title="Edit" @onclick="(() => ModifyUser(user))">&#x1F527;</button></td>
                     <td>@user.Name</td>
                     <td>@user.Surname</td>
                     <td>@(user.Weight.ToString() ?? "Weight unknown")</td>
@@ -58,11 +60,15 @@ else
         orig = await Repo.GetItemsAsync();
         users = orig;
     }
-    void DeleteUser(User user)
+    async Task DeleteUser(User user)
     {
-        Repo.DeleteItem(user.Id);
-        Repo.Save();
-        users = Repo.GetItems();
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Delete " + user.Name + "?");
+        if (confirmed)
+        {
+            Repo.DeleteItem(user.Id);
+            Repo.Save();
+            users = Repo.GetItems();
+        }
     }
     void ModifyUser(User user)
     {

@@ -1,9 +1,32 @@
 ﻿.table thead {
-    background-color: #f54242;
+    background-color: #2d1ad6;
     color: white;
 }
 
 .table tbody tr:hover {
-    background-color: #ffb3b3;
+    background-color: #f3ff70;
 }
 
+.linkbtn:link, .linkbtn:visited{
+    background-color: blue;
+    color: white;
+    border: 2px solid blue;
+    padding: 3px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.linkbtn:hover, .linkbtn:active {
+    background-color: yellow;
+    color: black;
+}
+
+.actionbtn{
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid black;
+}
+.actionbtn:hover{
+    background-color: yellow;
+}

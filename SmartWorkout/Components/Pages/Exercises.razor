@@ -3,11 +3,12 @@
 @using DBAccess.Repository
 @inject IGenericRepository<Exercise> Repo;
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 @rendermode InteractiveServer
 @attribute [StreamRendering]
 
 <PageTitle>Exercises</PageTitle>
-<a href="/addexercise">New Exercise...</a><br />
+<a href="/addexercise" class="linkbtn">New Exercise...</a><br /><br />
 Exercise types:
 
 @if (exercises == null)
@@ -27,7 +28,7 @@ else
             @foreach (var exercise in exercises)
             {
                 <tr>
-                    <td><button @onclick="(() => DeleteExercise(exercise))">Delete</button><button @onclick="(() => ModifyExercise(exercise))">Edit</button></td>
+                    <td><button class="actionbtn" title="Delete" @onclick="(() => DeleteExercise(exercise))">&#10060;</button><button class="actionbtn" title="Edit" @onclick="(() => ModifyExercise(exercise))">&#x1F527;</button></td>
                     <td>@exercise.Name</td>
                 </tr>
             }
@@ -40,11 +41,15 @@ else
     {
         exercises = await Repo.GetItemsAsync();
     }
-    void DeleteExercise(Exercise exercise)
+    async Task DeleteExercise(Exercise exercise)
     {
-        Repo.DeleteItem(exercise.Id);
-        Repo.Save();
-        exercises = Repo.GetItems();
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Delete " + exercise.Name + "?");
+        if (confirmed)
+        {
+            Repo.DeleteItem(exercise.Id);
+            Repo.Save();
+            exercises = Repo.GetItems();
+        }
     }
     void ModifyExercise(Exercise exercise)
     {
