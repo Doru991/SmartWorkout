@@ -59,9 +59,17 @@ namespace SmartWorkout.DBAccess.Repository
             context.Set<T>().Add(item);
         }
 
-        public void DeleteItem(int id)
+        public void DeleteItem(int id, int? comp = null)
         {
-            T? item = context.Set<T>().Find(id);
+            T? item;
+            if (comp == null)
+            {
+                item = context.Set<T>().Find(id);
+            }
+            else
+            {
+                item = context.Set<T>().Find(id, comp);
+            }
             if (item != null)
             {
                 context.Set<T>().Remove(item);

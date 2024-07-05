@@ -8,7 +8,7 @@
 }
 .workout-grid {
     display: grid;
-    grid: auto auto / auto auto auto auto;
+    grid-template-columns: auto auto auto;
 }
 .addbtn:link, .addbtn:visited {
     background-color: green;

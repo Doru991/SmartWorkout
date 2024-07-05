@@ -14,7 +14,7 @@ namespace SmartWorkout.DBAccess.Repository
         public Task<T?> GetItemByIdAsync(int id);
         public T? GetItemById(int id);
         public void AddItem(T item);
-        public void DeleteItem(int id);
+        public void DeleteItem(int id, int? comp = null);
         public void UpdateItem(T item);
         public void Save();
     }

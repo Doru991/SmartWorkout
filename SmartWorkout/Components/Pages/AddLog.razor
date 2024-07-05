@@ -9,12 +9,14 @@
 
 <h3>Logging an exercise</h3>
 <h4>Note: Complete only the fields that apply to the exercise type</h4>
-<EditForm Model="ExerciseLog" OnSubmit="Submit" FormName="NewLog">
+<EditForm Model="ExerciseLog" OnValidSubmit="Submit" FormName="NewLog">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div>
         <InputSelect @bind-Value="ExerciseLog!.ExerciseId">
             @if (ExerciseLog.ExerciseId == 0)
             {
-                <option selected value="0">None (choose)</option>
+                <option selected value="0">None (please choose)</option>
             }
             @if(exercises != null){
             @foreach(var exercise in exercises)

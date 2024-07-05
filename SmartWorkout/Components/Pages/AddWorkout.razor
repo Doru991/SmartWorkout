@@ -8,7 +8,9 @@
 
 <h3>Adding new workout</h3>
 
-<EditForm Model="Workout" OnSubmit="Submit" FormName="Workout">
+<EditForm Model="Workout" OnValidSubmit="Submit" FormName="Workout">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div>
         <label>
             Workout date

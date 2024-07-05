@@ -23,9 +23,9 @@ else
     @foreach(var workout in workouts)
     {
         <div class="workout">
-            Workout on @workout.Date.ToShortDateString()<br />
+            <h4>Workout on @workout.Date.ToShortDateString()</h4>
                 Lasted for @workout.Duration minutes.&ensp;<button class="delbtn" @onclick="(() => DeleteWorkout(workout))">Delete</button><br /><br />
-            Exercises:<br />
+            <h5>Exercises:</h5>
             <ul>
                     @foreach (var log in logs.Where(l => l.WorkoutId == workout.Id))
                     {
@@ -38,7 +38,7 @@ else
                             else
                             {
                                 <span>Exercise</span>
-                            }&ensp; <button class="delbtn">Delete exercise</button>
+                            }&ensp; <button class="delbtn" @onclick="(() => DeleteLog(log))">Delete exercise</button>
                                 <br />
                             @if(log.Sets!=null){@log.Sets <span>sets of&nbsp;</span>}
                             @if(log.Reps!=null){@log.Reps <span>reps;&nbsp;</span>}
@@ -48,7 +48,7 @@ else
                         </li>
                     }
             </ul>
-            <a href="/addlog/@workout.Id+@UserId" class="addbtn">Log exercise</a>
+            &nbsp;<a href="/addlog/@workout.Id+@UserId" class="addbtn">Log a new exercise</a>
         </div>
     }
     </div>
@@ -72,6 +72,16 @@ else
         {
             WRepo.DeleteItem(workout.Id);
             WRepo.Save();
+            await OnInitializedAsync();
+        }
+    }
+    async Task DeleteLog(ExerciseLog log)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Remove logged exercise?");
+        if (confirmed)
+        {
+            ERepo.DeleteItem(log.WorkoutId, log.ExerciseId);
+            ERepo.Save();
             await OnInitializedAsync();
         }
     }
