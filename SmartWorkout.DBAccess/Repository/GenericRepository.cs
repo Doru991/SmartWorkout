@@ -46,11 +46,14 @@ namespace SmartWorkout.DBAccess.Repository
         {
             return context.Set<T>().ToArray<T>();
         }
-        public async Task<T?> GetItemById(int id)
+        public async Task<T?> GetItemByIdAsync(int id)
         {
             return await context.Set<T>().FindAsync(id);
         }
-
+        public T? GetItemById(int id)
+        {
+            return context.Set<T>().Find(id);
+        }
         public void AddItem(T item)
         {
             context.Set<T>().Add(item);

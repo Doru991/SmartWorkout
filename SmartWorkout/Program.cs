@@ -9,6 +9,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddScoped<IGenericRepository<User>>(serviceProvider => new GenericRepository<User>(new SmartWorkoutContext()));
 builder.Services.AddScoped<IGenericRepository<Exercise>>(serviceProvider => new GenericRepository<Exercise>(new SmartWorkoutContext()));
+builder.Services.AddScoped<IGenericRepository<Workout>>(serviceProvider => new GenericRepository<Workout>(new SmartWorkoutContext()));
+builder.Services.AddScoped<IGenericRepository<ExerciseLog>>(serviceProvider => new GenericRepository<ExerciseLog>(new SmartWorkoutContext()));
 builder.Services.AddDbContext<SmartWorkoutContext>();
 var app = builder.Build();
 

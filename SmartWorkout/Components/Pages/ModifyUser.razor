@@ -64,7 +64,7 @@ else{
         if (UserId != null && !UserId.Equals(""))
         {
             int Id = Int32.Parse(UserId);
-            User = await Repo.GetItemById(Id);
+            User = await Repo.GetItemByIdAsync(Id);
         }
         else User = null;
     }

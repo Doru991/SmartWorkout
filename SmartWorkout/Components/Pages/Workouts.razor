@@ -1,0 +1,62 @@
+﻿@page "/workouts/{UserId}"
+@inject IGenericRepository<User> URepo
+@inject IGenericRepository<Workout> WRepo
+@inject IGenericRepository<ExerciseLog> ERepo
+@inject IGenericRepository<Exercise> XRepo
+@using DBAccess
+@using DBAccess.Repository
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+@attribute [StreamRendering]
+<PageTitle>Workouts</PageTitle>
+
+<h2>Individual workouts</h2>
+
+@if (workouts == null || logs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="workout-grid">
+    @foreach(var workout in workouts)
+    {
+        <div class="workout">
+            Workout on @workout.Date.ToShortDateString(), at @workout.Date.ToShortTimeString();<br />
+            Lasted for @workout.Duration minutes.<br /><br />
+            Exercises:<br />
+            <ul>
+                    @foreach (var log in logs.Where(l => l.WorkoutId == workout.Id))
+                    {
+                        Exercise? x = XRepo.GetItemById(log.ExerciseId);
+                        <li>
+                            @if (x != null)
+                            {
+                                @x.Name
+                            }else{<span>Exercise</span>}
+                                <br />
+                            @if(log.Sets!=null){@log.Sets <span>sets of&nbsp;</span>}
+                            @if(log.Reps!=null){@log.Reps <span>reps;&nbsp;</span>}
+                            @if(log.Weight!=null){@log.Weight <span>kg;&nbsp;</span>}
+                            @if(log.Distance!=null){@log.Distance <span>km;&nbsp;</span>}
+                            @if(log.Duration!=null){@log.Duration <span>minutes</span>}
+                        </li>
+                    }
+            </ul>
+        </div>
+    }
+    </div>
+}
+@code {
+    [Parameter]
+    public String? UserId { get; set; }
+    private Workout[]? workouts = null;
+    private ExerciseLog[]? logs = null;
+    protected override async Task OnInitializedAsync()
+    {
+        var all = await WRepo.GetItemsAsync();
+        logs = await ERepo.GetItemsAsync();
+        if (UserId == null) throw new ArgumentNullException();
+        workouts = all.Where(w => w.UserId == Int32.Parse(UserId)).ToArray();
+    }
+}

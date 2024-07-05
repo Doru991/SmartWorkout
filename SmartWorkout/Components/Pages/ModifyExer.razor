@@ -34,7 +34,7 @@ else
         if (ExerciseId != null && !ExerciseId.Equals(""))
         {
             int Id = Int32.Parse(ExerciseId);
-            Exercise = await Repo.GetItemById(Id);
+            Exercise = await Repo.GetItemByIdAsync(Id);
         }
         else Exercise = null;
     }

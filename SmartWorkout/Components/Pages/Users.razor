@@ -41,7 +41,11 @@ else
             @foreach (var user in users)
             {
                 <tr>
-                    <td><button class="actionbtn" title="Delete" @onclick="(() => DeleteUser(user))">&#10060;</button><button class="actionbtn" title="Edit" @onclick="(() => ModifyUser(user))">&#x1F527;</button></td>
+                    <td>
+                        <button class="actionbtn" title="Delete" @onclick="(() => DeleteUser(user))">&#10060;</button>
+                        <button class="actionbtn" title="Edit" @onclick="(() => ModifyUser(user))">&#x1F527;</button>
+                        <button class="actionbtn" title="View Workouts" @onclick="(() => UserWorkouts(user))">&#x1F3CB;</button>
+                    </td>
                     <td>@user.Name</td>
                     <td>@user.Surname</td>
                     <td>@(user.Weight.ToString() ?? "Weight unknown")</td>
@@ -73,6 +77,10 @@ else
     void ModifyUser(User user)
     {
         NavigationManager.NavigateTo("modifyuser/"+user.Id);
+    }
+    void UserWorkouts(User user)
+    {
+        NavigationManager.NavigateTo("workouts/" + user.Id);
     }
     private void Search()
     {

@@ -1,0 +1,10 @@
+﻿.workout {
+    background-color: #034efc;
+    color: white;
+    padding: 20px 10px;
+    border-radius: 12px;
+}
+.workout-grid {
+    display: grid;
+    grid: auto auto / auto auto auto auto;
+}
