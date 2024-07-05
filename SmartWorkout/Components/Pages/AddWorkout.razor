@@ -1,0 +1,45 @@
+﻿@page "/addwork/{UserId}"
+@inject IGenericRepository<Workout> Repo
+@inject NavigationManager NavigationManager
+@using DBAccess
+@using DBAccess.Repository
+@rendermode InteractiveServer
+<PageTitle>Log Workout</PageTitle>
+
+<h3>Adding new workout</h3>
+
+<EditForm Model="Workout" OnSubmit="Submit" FormName="Workout">
+    <div>
+        <label>
+            Workout date
+            <InputDate @bind-Value="Workout!.Date" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Workout duration (minutes)
+            <InputNumber @bind-Value="Workout!.Duration" />
+        </label>
+    </div><br />
+    <div><button type="submit">Done</button></div>
+</EditForm>
+@code {
+    [Parameter]
+    public String? UserId { get; set; }
+    [SupplyParameterFromForm]
+    public Workout? Workout { get; set; }
+    protected override void OnInitialized()
+    {
+        Workout = new Workout();
+        Workout.UserId = Int32.Parse(UserId ?? "0");
+    }
+    private void Submit()
+    {
+        if (Workout != null)
+        {
+            Repo.AddItem(Workout);
+            Repo.Save();
+            NavigationManager.NavigateTo("workouts/" + UserId);
+        }
+    }
+}

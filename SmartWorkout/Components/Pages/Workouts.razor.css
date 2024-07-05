@@ -3,8 +3,38 @@
     color: white;
     padding: 20px 10px;
     border-radius: 12px;
+    margin: 6px;
+    box-shadow: 10px 10px 5px #343c47;
 }
 .workout-grid {
     display: grid;
     grid: auto auto / auto auto auto auto;
+}
+.addbtn:link, .addbtn:visited {
+    background-color: green;
+    color: white;
+    border: 1px solid green;
+    padding: 1px 2px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.addbtn:hover, .addbtn:active {
+    background-color: forestgreen;
+}
+.delbtn {
+    background-color: red;
+    color: white;
+    border: 1px solid red;
+    padding: 1px 2px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.delbtn:hover {
+    background-color: indianred;
 }

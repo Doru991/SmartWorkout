@@ -1,0 +1,84 @@
+﻿@page "/addlog/{WorkId}+{UserId}"
+@inject IGenericRepository<ExerciseLog> Repo
+@inject IGenericRepository<Exercise> ERepo
+@inject NavigationManager NavigationManager
+@using DBAccess
+@using DBAccess.Repository
+@rendermode InteractiveServer
+<PageTitle>Log Exercise</PageTitle>
+
+<h3>Logging an exercise</h3>
+<h4>Note: Complete only the fields that apply to the exercise type</h4>
+<EditForm Model="ExerciseLog" OnSubmit="Submit" FormName="NewLog">
+    <div>
+        <InputSelect @bind-Value="ExerciseLog!.ExerciseId">
+            @if (ExerciseLog.ExerciseId == 0)
+            {
+                <option selected value="0">None (choose)</option>
+            }
+            @if(exercises != null){
+            @foreach(var exercise in exercises)
+            {
+                <option value="@exercise.Id">@exercise.Name</option>
+            }
+            }
+        </InputSelect>
+    </div>
+    <div>
+    <label>
+        Number of sets
+        <InputNumber @bind-Value="ExerciseLog!.Sets" />
+    </label>
+    </div>
+    <div>
+        <label>
+            Number of reps per set
+            <InputNumber @bind-Value="ExerciseLog!.Reps" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Weight of the machine/dumbbells
+            <InputNumber @bind-Value="ExerciseLog!.Weight" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Distance covered
+            <InputNumber @bind-Value="ExerciseLog!.Distance" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Exercise duration (minutes)
+            <InputNumber @bind-Value="ExerciseLog!.Duration" />
+        </label>
+    </div>
+    <div><button type="submit">Done</button></div>
+</EditForm>
+@code {
+    [Parameter]
+    public String? WorkId { get; set; }
+    [Parameter]
+    public String? UserId { get; set; }
+    [SupplyParameterFromForm]
+    public ExerciseLog? ExerciseLog { get; set; }
+    private Exercise[]? exercises = null;
+
+    protected override void OnInitialized()
+    {
+        exercises = ERepo.GetItems();
+        ExerciseLog = new ExerciseLog();
+        ExerciseLog.WorkoutId = Int32.Parse(WorkId ?? "0");
+
+    }
+    private void Submit()
+    {
+        if (ExerciseLog != null)
+        {
+            Repo.AddItem(ExerciseLog);
+            Repo.Save();
+            NavigationManager.NavigateTo("workouts/" + UserId);
+        }
+    }
+}
