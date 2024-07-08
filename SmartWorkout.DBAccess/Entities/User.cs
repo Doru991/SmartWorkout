@@ -25,7 +25,12 @@ namespace SmartWorkout.DBAccess.Entities
         public double? Weight { get; set; }
         [Range(10, 100, ErrorMessage = "Age must be between 10 and 100")]
         public int? Age { get; set; }
-
+        public int RoleId { get; set; }
+        public int? TrainerId { get; set; } = null!;
+        public string? Password { get; set; } = null!;
+        public UserRole Role { get; set; } = null!;
         public ICollection<Workout> Workouts { get; set; } = new HashSet<Workout>();
+        public User Trainer { get; set; } = null!;
+        public ICollection<User> Clients { get; set; } = null!;
     }
 }

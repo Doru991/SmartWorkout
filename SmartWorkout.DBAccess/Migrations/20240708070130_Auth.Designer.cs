@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartWorkout.DBAccess;
 
@@ -11,9 +12,11 @@ using SmartWorkout.DBAccess;
 namespace SmartWorkout.DBAccess.Migrations
 {
     [DbContext(typeof(SmartWorkoutContext))]
-    partial class SmartWorkoutContextModelSnapshot : ModelSnapshot
+    [Migration("20240708070130_Auth")]
+    partial class Auth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,9 +98,7 @@ namespace SmartWorkout.DBAccess.Migrations
                         .HasColumnType("nvarchar(15)");
 
                     b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(2);
+                        .HasColumnType("int");
 
                     b.Property<string>("Surname")
                         .IsRequired()

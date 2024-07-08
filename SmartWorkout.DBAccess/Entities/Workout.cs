@@ -11,7 +11,7 @@ namespace SmartWorkout.DBAccess.Entities
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        [Range(0, 1440, ErrorMessage = "Choosa an appropriate duration in minutes")]
+        [Range(0, 1440, ErrorMessage = "Choose an appropriate duration in minutes")]
         public int? Duration { get; set; }
         public DateTime Date { get; set; }
         public User User { get; set; } = null!;
