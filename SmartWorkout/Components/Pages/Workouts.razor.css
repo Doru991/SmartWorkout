@@ -1,5 +1,5 @@
 ﻿.workout {
-    background-color: #034efc;
+    background-color: #3922e3;
     color: white;
     padding: 20px 10px;
     border-radius: 12px;
@@ -22,12 +22,12 @@
 }
 
 .addbtn:hover, .addbtn:active {
-    background-color: forestgreen;
+    background-color: yellowgreen;
 }
 .delbtn {
-    background-color: red;
+    background-color: darkorange;
     color: white;
-    border: 1px solid red;
+    border: 1px solid darkorange;
     padding: 1px 2px;
     text-align: center;
     text-decoration: none;
@@ -36,5 +36,5 @@
 }
 
 .delbtn:hover {
-    background-color: indianred;
+    background-color: orange;
 }
