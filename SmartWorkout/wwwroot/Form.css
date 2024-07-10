@@ -1,0 +1,15 @@
+﻿button {
+    background-color: blue;
+    color: white;
+    border: 2px solid blue;
+    padding: 3px 5px;
+    text-align: center;
+    text-decoration: none;
+}
+    button:hover {
+        background-color: yellow;
+        color: black;
+    }
+label{
+    margin: 3px 3px;
+}

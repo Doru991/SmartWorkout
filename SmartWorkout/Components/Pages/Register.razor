@@ -1,0 +1,56 @@
+﻿@page "/register"
+@inject IGenericRepository<User> Repo
+@inject NavigationManager NavigationManager
+@using DBAccess
+@using DBAccess.Repository
+@rendermode InteractiveServer
+<link href="Form.css" rel="stylesheet"/>
+<PageTitle>Register</PageTitle>
+
+<h3>Register new account</h3>
+
+<EditForm Model="User" OnValidSubmit="Submit" FormName="NewUser">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label>
+            Name:
+            <InputText @bind-Value="User!.Name" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Surname:
+            <InputText @bind-Value="User!.Surname" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Email:
+            <InputText @bind-Value="User!.Email" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Password:
+            <InputText type="password" @bind-Value="User!.Password" />
+        </label>
+    </div><br />
+    <div><button type="submit">Register</button></div>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public User? User { get; set; }
+    protected override void OnInitialized() => User ??= new();
+    private void Submit()
+    {
+        if (User != null)
+        {
+            User.RoleId = 1;
+            Repo.AddItem(User);
+            Repo.Save();
+            NavigationManager.NavigateTo("login");
+        }
+    }
+}
