@@ -1,10 +1,61 @@
 ﻿@page "/login"
+@inject IGenericRepository<User> Repo
+@inject IGenericRepository<UserRole> RRepo
+@inject NavigationManager NavigationManager
 @using DBAccess
 @using DBAccess.Repository
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using SmartWorkout.Model
+@using System.Security.Claims
 <link href="Form.css" rel="stylesheet" />
 <PageTitle>Login</PageTitle>
 <h3>Login</h3>
 
-@code {
+<EditForm Model="Model" FormName="LoginForm" OnValidSubmit="Authenticate">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label>
+            Email:
+            <InputText @bind-Value="Model!.Email" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Password:
+            <InputText type="password" @bind-Value="Model!.Password" />
+        </label>
+    </div><br />
+    <div><span style="color:red">@Error</span></div>
+    <div><button type="submit">Log in</button></div>
+</EditForm>
 
+@code {
+    public String Error { get; set; } = "";
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+    [SupplyParameterFromForm]
+    public LoginModel Model { get; set; } = new();
+    public async Task Authenticate()
+    {
+        var account = ((UserRepository)Repo).GetUserByEmail(Model.Email);
+        if (account is null || account.Password != Model.Password)
+        {
+            Error = "Wrong email or password. Try again.";
+            return;
+        }
+        var role = RRepo.GetItemById(account.RoleId);
+        if (role is null) role = new UserRole();
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, Model.Email),
+            new Claim(ClaimTypes.Role, role.Name),
+            new Claim(ClaimTypes.Sid, account.Id.ToString())
+        };
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var principal = new ClaimsPrincipal(identity);
+        await HttpContext.SignInAsync(principal);
+        NavigationManager.NavigateTo("/");
+    }
 }

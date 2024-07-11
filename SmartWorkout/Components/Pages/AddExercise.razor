@@ -1,5 +1,7 @@
 ﻿@page "/addexercise"
 @inject IGenericRepository<Exercise> Repo
+@attribute [Authorize(Roles = "Trainer")]
+@using Microsoft.AspNetCore.Authorization
 @inject NavigationManager NavigationManager
 @using DBAccess
 @using DBAccess.Repository

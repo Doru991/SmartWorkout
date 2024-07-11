@@ -1,6 +1,8 @@
 ﻿@page "/modifyexer/{ExerciseId}"
 @inject IGenericRepository<Exercise> Repo
 @inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Trainer")]
+@using Microsoft.AspNetCore.Authorization
 @using DBAccess
 @using DBAccess.Repository
 @rendermode InteractiveServer

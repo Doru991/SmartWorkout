@@ -1,6 +1,8 @@
 ﻿@page "/modifyuser/{UserId}"
 @inject IGenericRepository<User> Repo
 @inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Trainer")]
+@using Microsoft.AspNetCore.Authorization
 @using DBAccess
 @using DBAccess.Repository
 @rendermode InteractiveServer
@@ -74,7 +76,9 @@ else{
         {
             Repo.UpdateItem(User);
             Repo.Save();
-            NavigationManager.NavigateTo("users");
+            if(User.TrainerId!=null)
+            NavigationManager.NavigateTo("users/"+User.TrainerId);
+            else NavigationManager.NavigateTo("/");
         }
     }
 }

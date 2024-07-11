@@ -13,3 +13,10 @@
 label{
     margin: 3px 3px;
 }
+form{
+    background-color: lightgoldenrodyellow;
+    display: inline-block;
+    padding: 10px 10px 10px 10px;
+    border-radius: 5px;
+    box-shadow: 10px 10px 5px #dddddd;
+}

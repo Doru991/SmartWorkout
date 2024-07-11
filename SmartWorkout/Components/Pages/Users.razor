@@ -1,7 +1,11 @@
-﻿@page "/users"
+﻿@page "/users/{Id}"
 @inject IGenericRepository<User> Repo
+@attribute [Authorize(Roles = "Trainer")]
+@using Microsoft.AspNetCore.Authorization
 @using DBAccess
 @using DBAccess.Repository
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
 @rendermode InteractiveServer
@@ -10,13 +14,15 @@
 <PageTitle>Users</PageTitle>
 
 <h4>Client list:</h4><br />
-<a href="/adduser" class="linkbtn">Add User</a><br /><br />
 @if (users == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+    <a href="/adduser/@Id" class="linkbtn">Add User</a>
+    <br />
+    <br />
     <form method="get" @onsubmit="Search" @formname="search">
         <div>
             <label>
@@ -33,6 +39,8 @@ else
                 <th>Options</th>
                 <th>Name</th>
                 <th>Surname</th>
+                <th>Email</th>
+                <th>Phone</th>
                 <th>Weight</th>
                 <th>Age</th>
             </tr>
@@ -48,6 +56,8 @@ else
                     </td>
                     <td>@user.Name</td>
                     <td>@user.Surname</td>
+                    <td>@(user.Email ?? "No email")</td>
+                    <td>@(user.Phone ?? "No phone")</td>
                     <td>@(user.Weight.ToString() ?? "Weight unknown")</td>
                     <td>@(user.Age.ToString() ?? "Age unknown")</td>
                 </tr>
@@ -56,13 +66,17 @@ else
     </table>
 }
 @code {
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
     public String? Searchtext { get; set; }
+    [Parameter]
+    public string Id { get; set; } = "";
     private User[]? users = null;
     private User[]? orig = null;
     protected override async Task OnInitializedAsync()
     {
-        orig = await Repo.GetItemsAsync();
-        users = orig;
+            orig = await ((UserRepository)Repo).GetUsersByTrainer(Int32.Parse(Id));
+            users = orig;
     }
     async Task DeleteUser(User user)
     {
@@ -71,7 +85,8 @@ else
         {
             Repo.DeleteItem(user.Id);
             Repo.Save();
-            users = Repo.GetItems();
+            orig = await ((UserRepository)Repo).GetUsersByTrainer(Int32.Parse(Id));
+            users = orig;
         }
     }
     void ModifyUser(User user)

@@ -1,6 +1,8 @@
-﻿@page "/adduser"
+﻿@page "/adduser/{Trainer}"
 @inject IGenericRepository<User> Repo
 @inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Trainer")]
+@using Microsoft.AspNetCore.Authorization
 @using DBAccess
 @using DBAccess.Repository
 @rendermode InteractiveServer
@@ -28,6 +30,12 @@
             <InputText @bind-Value="User!.Email" />
         </label>
     </div>
+       <div>
+        <label>
+            Password:
+            <InputText @bind-Value="User!.Password" />
+        </label>
+    </div>
     <div>
         <label>
             Phone number:
@@ -50,16 +58,19 @@
 </EditForm>
 
 @code {
+    [Parameter]
+    public String? Trainer { get; set; }
     [SupplyParameterFromForm]
     public User? User { get; set; }
     protected override void OnInitialized() => User ??= new();
     private void Submit()
     {
+        if (Trainer != null) User.TrainerId = Int32.Parse(Trainer);
         if (User != null)
         {
             Repo.AddItem(User);
             Repo.Save();
-            NavigationManager.NavigateTo("users");
+            NavigationManager.NavigateTo("users/"+Trainer);
         }
     }
 }
